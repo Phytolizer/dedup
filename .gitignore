@@ -4,3 +4,8 @@
 dedup
 compile_commands.json
 .cache
+Makefile
+*.make
+bin/
+obj/
+build/
