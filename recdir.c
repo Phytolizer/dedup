@@ -23,7 +23,7 @@ static void recdir_pop(RECDIR* rd)
     (void)BUF_POP(&rd->dirs);
 }
 
-void closerecdir(RECDIR* rd)
+void recdir_close(RECDIR* rd)
 {
     for (size_t i = 0; i < rd->dirs.len; ++i)
     {
@@ -34,19 +34,19 @@ void closerecdir(RECDIR* rd)
     free(rd);
 }
 
-RECDIR* openrecdir(str path)
+RECDIR* recdir_open(str path)
 {
     RECDIR* result = malloc(sizeof(RECDIR));
     result->dirs = (Dirs)BUF_NEW;
     if (recdir_push(result, path) < 0)
     {
-        closerecdir(result);
+        recdir_close(result);
         return NULL;
     }
     return result;
 }
 
-struct dirent* readrecdir(RECDIR* rd)
+struct dirent* recdir_read(RECDIR* rd)
 {
     while (rd->dirs.len > 0)
     {

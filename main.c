@@ -9,7 +9,7 @@
 
 static void print_files_recursively(str dir_path)
 {
-    RECDIR* recdir = openrecdir(dir_path);
+    RECDIR* recdir = recdir_open(dir_path);
     if (recdir == NULL)
     {
         return;
@@ -18,7 +18,7 @@ static void print_files_recursively(str dir_path)
     while (true)
     {
         errno = 0;
-        ent = readrecdir(recdir);
+        ent = recdir_read(recdir);
         if (ent == NULL)
         {
             if (errno != 0)
@@ -29,7 +29,7 @@ static void print_files_recursively(str dir_path)
         }
         printf(STR_FMT "/%s\n", STR_ARG(recdir_path(recdir)), ent->d_name);
     }
-    closerecdir(recdir);
+    recdir_close(recdir);
 }
 
 int main(int argc, char** argv)
