@@ -126,9 +126,23 @@ int main(int argc, char** argv)
 
     print_files_recursively(str_lit("."), &db);
 
-    for (long i = 0; i < stbds_hmlen(db); i++)
+    for (ptrdiff_t i = 0; i < stbds_hmlen(db); i++)
     {
-        for (long j = 0; j < stbds_arrlen(db[i].value); j++)
+        if (stbds_arrlen(db[i].value) > 1)
+        {
+            char cstr[SHA256_BLOCK_SIZE * 2 + 1];
+            hash_as_cstr(db[i].key, cstr);
+            printf("%s:\n", cstr);
+            for (ptrdiff_t j = 0; j < stbds_arrlen(db[i].value); j++)
+            {
+                printf("  " STR_FMT "\n", STR_ARG(db[i].value[j]));
+            }
+        }
+    }
+
+    for (ptrdiff_t i = 0; i < stbds_hmlen(db); i++)
+    {
+        for (ptrdiff_t j = 0; j < stbds_arrlen(db[i].value); j++)
         {
             str_free(db[i].value[j]);
         }
