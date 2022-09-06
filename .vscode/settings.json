@@ -1,5 +1,6 @@
 {
     "[c]": {
         "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
-    }
+    },
+    "python.formatting.provider": "black"
 }
