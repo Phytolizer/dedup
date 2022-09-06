@@ -2,12 +2,10 @@
 
 #include <errno.h>
 
-#define TOP(rd) (&(rd)->dirs.ptr[(rd)->dirs.len - 1])
-
 static int recdir_push(RECDIR* rd, str dir_path)
 {
     BUF_PUSH(&rd->dirs, ((RECDIR_Frame){.dir = opendir(str_ptr(dir_path)), .path = dir_path}));
-    if (TOP(rd)->dir == NULL)
+    if (recdir_top(rd)->dir == NULL)
     {
         str_free(dir_path);
         (void)BUF_POP(&rd->dirs);
@@ -18,9 +16,14 @@ static int recdir_push(RECDIR* rd, str dir_path)
 
 static void recdir_pop(RECDIR* rd)
 {
-    closedir(TOP(rd)->dir);
-    str_free(TOP(rd)->path);
+    closedir(recdir_top(rd)->dir);
+    str_free(recdir_top(rd)->path);
     (void)BUF_POP(&rd->dirs);
+}
+
+RECDIR_Frame* recdir_top(RECDIR* rd)
+{
+    return &(rd)->dirs.ptr[(rd)->dirs.len - 1];
 }
 
 void recdir_close(RECDIR* rd)
@@ -50,7 +53,7 @@ struct dirent* recdir_read(RECDIR* rd)
 {
     while (rd->dirs.len > 0)
     {
-        RECDIR_Frame* top = TOP(rd);
+        RECDIR_Frame* top = recdir_top(rd);
         struct dirent* ent = readdir(top->dir);
         if (ent != NULL)
         {
@@ -76,5 +79,5 @@ struct dirent* recdir_read(RECDIR* rd)
 
 str recdir_path(RECDIR* rd)
 {
-    return str_ref(TOP(rd)->path);
+    return str_ref(recdir_top(rd)->path);
 }

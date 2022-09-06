@@ -17,6 +17,7 @@ typedef struct
     Dirs dirs;
 } RECDIR;
 
+RECDIR_Frame* recdir_top(RECDIR* rd);
 void recdir_close(RECDIR* rd);
 RECDIR* recdir_open(str path);
 struct dirent* recdir_read(RECDIR* rd);
