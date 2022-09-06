@@ -5,9 +5,10 @@ EXE := dedup
 CFLAGS := -Wall \
 	-Wextra \
 	-Wpedantic \
+	-Wmissing-prototypes \
+	-Wno-unused-function \
 	-std=c11 \
 	-ggdb \
-	-Wmissing-prototypes \
 	-fsanitize=address,undefined \
 	-D_DEFAULT_SOURCE \
 	-fno-omit-frame-pointer
