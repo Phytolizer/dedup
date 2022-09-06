@@ -1,6 +1,10 @@
 SRCS := main.c str.c recdir.c
 OBJS := $(SRCS:.c=.o)
 EXE := dedup
+LIBS := sha256
+LIBS_FILES := $(patsubst %,lib%.a,$(LIBS))
+LIBDIR := crypto-algorithms
+LIB_LDFLAGS := $(patsubst %,-l%,$(LIBS))
 
 CFLAGS := -Wall \
 	-Wextra \
@@ -15,15 +19,18 @@ CFLAGS := -Wall \
 
 LDFLAGS := -fsanitize=address,undefined
 
-.PHONY: all clean
+.PHONY: all clean libs
 
 all: $(EXE)
+
+libs:
+	$(MAKE) -C $(LIBDIR)
 
 run: $(EXE)
 	./$(EXE)
 
-$(EXE): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^
+$(EXE): $(OBJS) libs
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) -L./$(LIBDIR) $(LIB_LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(EXE)

@@ -1,4 +1,5 @@
 *.o
+*.a
 dedup
 compile_commands.json
 .cache
