@@ -1,0 +1,4 @@
+*.o
+dedup
+compile_commands.json
+.cache
