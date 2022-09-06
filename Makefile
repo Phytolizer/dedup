@@ -15,7 +15,10 @@ CFLAGS := -Wall \
 	-ggdb \
 	-fsanitize=address,undefined \
 	-D_DEFAULT_SOURCE \
-	-fno-omit-frame-pointer
+	-fno-omit-frame-pointer \
+	-I$(LIBDIR)/repo \
+	-MMD \
+	-MP
 
 LDFLAGS := -fsanitize=address,undefined
 
@@ -34,3 +37,5 @@ $(EXE): $(OBJS) libs
 
 clean:
 	rm -f $(OBJS) $(EXE)
+
+-include $(OBJS:.o=.d)

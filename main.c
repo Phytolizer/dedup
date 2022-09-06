@@ -3,6 +3,7 @@
 
 #include <dirent.h>
 #include <errno.h>
+#include <sha256.h>
 #include <stdio.h>
 
 #define UNUSED(x) (void)(x)
